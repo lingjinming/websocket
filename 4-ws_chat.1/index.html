@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .time {
+            margin-left: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,25 +31,28 @@
                 }
             }
         }
-        webSocket.onclose = function() {
-                console.log('cloase')
-            }
-            //接收到数据的时候，调用showmessage(),会将内容放在div中并append到body中
-        webSocket.onmessage = function(e) {
-            console.log(e);
-            var mes = JSON.parse(e.data);
 
-            showMessage(mes.data, mes.type);
+        //接收到数据的时候，调用showmessage(),会将内容放在div中并append到body中
+        webSocket.onmessage = function(e) {
+                console.log(e);
+                var data = JSON.parse(e.data);
+                showMessage(data.type, data.msg, data.time);
+            }
+            // 连接关闭
+        webSocket.onclose = function() {
+            console.log('连接关闭')
         }
 
-        function showMessage(str, type) {
+        function showMessage(type, msg, time, ) {
             var div = document.createElement('div');
-            div.innerHTML = str;
+            div.innerHTML = msg + '<span class="time">' + time + '</span>';
             document.body.appendChild(div)
-            if (type == "enter") {
+            if (type == "0") {
                 div.style.color = "blue";
-            } else if (type == "leave") {
+            } else if (type == "1") {
                 div.style.color = "red";
+            } else {
+                div.style.color = "#666";
             }
         }
     </script>
